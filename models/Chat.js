@@ -23,6 +23,8 @@ const chatSchema = new mongoose.Schema({
             },
         },
     ],
+    language: { type: String, default: 'en-IN' },
+    interactionState: { type: String, default: 'IDLE' }, // IDLE, AWAITING_LANGUAGE
     lastUpdated: {
         type: Date,
         default: Date.now,

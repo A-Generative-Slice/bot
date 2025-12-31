@@ -54,15 +54,52 @@ app.post('/webhook', async (req, res) => {
                     // Find or create chat session
                     let chat = await Chat.findOne({ phoneNumber: from });
                     if (!chat) {
-                        chat = new Chat({ phoneNumber: from, messages: [] });
+                        chat = new Chat({ phoneNumber: from, messages: [], language: 'en-IN', interactionState: 'IDLE' });
                     }
 
+                    const input = text.trim();
+
+                    // 1. Handle Reset / Menu Command
+                    if (input.toLowerCase() === 'hello' || input.toLowerCase() === 'hi' || input.toLowerCase() === 'menu') {
+                        chat.interactionState = 'AWAITING_LANGUAGE';
+                        await chat.save();
+
+                        const menuMsg = `🙏 Welcome to Rose Chemicals! Please select your language:\n\n1. English\n2. Tamil\n3. Hindi\n4. Malayalam\n5. Telugu\n6. Kannada\n\nReply with the number (e.g., 2).`;
+                        await sendMessage(from, menuMsg);
+                        res.sendStatus(200);
+                        return;
+                    }
+
+                    // 2. Handle Language Selection
+                    if (chat.interactionState === 'AWAITING_LANGUAGE') {
+                        const langMap = {
+                            '1': { code: 'en-IN', name: 'English', msg: "Welcome to Rose Chemicals! How can I help you?" },
+                            '2': { code: 'ta-IN', name: 'Tamil', msg: "ரோஸ் கெமிக்கல்ஸிற்கு வரவேற்கிறோம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?" },
+                            '3': { code: 'hi-IN', name: 'Hindi', msg: "रोज़ केमिकल्स में आपका स्वागत है! मैं आपकी कैसे मदद कर सकता हूँ?" },
+                            '4': { code: 'ml-IN', name: 'Malayalam', msg: "റോസ് കെമിക്കൽസിലേക്ക് സ്വാഗതം! എനിക്ക് നിങ്ങളെ എങ്ങനെ സഹായിക്കാനാകും?" },
+                            '5': { code: 'te-IN', name: 'Telugu', msg: "రోజ్ కెమికల్స్ కి స్వాగతం! నేను మీకు ఎలా సహాయపడగలను?" },
+                            '6': { code: 'kn-IN', name: 'Kannada', msg: "ರೋಸ್ ಕೆಮಿಕಲ್ಸ್‌ಗೆ ಸ್ವಾಗತ! ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ?" }
+                        };
+
+                        if (langMap[input]) {
+                            chat.language = langMap[input].code;
+                            chat.interactionState = 'IDLE';
+                            await chat.save();
+                            await sendMessage(from, langMap[input].msg);
+                        } else {
+                            await sendMessage(from, "Please reply with a number from 1 to 6.\n\n1. English\n2. Tamil\n3. Hindi\n4. Malayalam\n5. Telugu\n6. Kannada");
+                        }
+                        res.sendStatus(200);
+                        return;
+                    }
+
+                    // 3. Normal AI Chat (IDLE state)
                     // Save User Message
                     chat.messages.push({ role: 'user', content: text });
                     await chat.save();
 
-                    // Generate AI response
-                    const aiResponse = await generateResponse(text);
+                    // Generate AI response with Language Context
+                    const aiResponse = await generateResponse(text, chat.language);
 
                     // Send response back
                     await sendMessage(from, aiResponse);
