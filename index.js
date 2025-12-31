@@ -10,7 +10,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // Connect to Database
-connectDB();
+// Connect to Database
+// connectDB() moved to handlers for serverless support
 
 // Webhook Verification (GET)
 app.get('/webhook', (req, res) => {
@@ -33,6 +34,7 @@ app.get('/webhook', (req, res) => {
 // Webhook Event Handling (POST)
 app.post('/webhook', async (req, res) => {
     try {
+        await connectDB();
         const body = req.body;
 
         if (body.object) {
@@ -84,6 +86,7 @@ app.post('/webhook', async (req, res) => {
 // Admin API to fetch chats
 app.get('/api/chats', async (req, res) => {
     try {
+        await connectDB();
         const chats = await Chat.find().sort({ lastUpdated: -1 });
         res.json(chats);
     } catch (error) {
