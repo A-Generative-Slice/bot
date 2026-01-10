@@ -7296,10 +7296,15 @@
           "id": 301,
           "name": "FABRIC CONDITIONER KIT",
           "mrp": 1100,
-          "description": "Premium fabric conditioner for ultra-soft, fresh-smelling clothes",
+          "description": "Premium fabric conditioner DIY kit for ultra-soft, fresh-smelling clothes with complete formulation and guidance",
           "yield": "20 liters",
           "cost_per_liter": 55,
           "knowledge_id": "fabric_conditioner",
+          "kit_contents": ["Base chemicals", "Fragrance concentrate", "Instructions PDF", "Video guide", "Measuring tools"],
+          "fragrances": ["Moments", "Blossom", "Comfort", "Magic"],
+          "manufacturing_time": "30 minutes",
+          "shelf_life": "12 months",
+          "difficulty_level": "Easy",
           "tags": [
             "fabric conditioner",
             "fabric softener",
@@ -7320,14 +7325,24 @@
             "fabric softener",
             "clothes softener",
             "comfort",
-            "laundry conditioner"
+            "laundry conditioner",
+            "softener kit",
+            "diy kit",
+            "manufacturing kit"
           ],
           "uses": [
             "Softens clothes after washing",
             "Adds long-lasting fragrance to laundry",
             "Reduces static cling in clothes",
-            "Makes ironing easier"
+            "Makes ironing easier",
+            "Business opportunity for entrepreneurs"
           ],
+          "training_data": {
+            "price_info": "₹1100 for kit, makes 20 liters, cost per liter ₹55",
+            "guidance_included": "Step by step PDF guide and manufacturing video with voice",
+            "support": "Personal assistance available during office hours",
+            "samples": "Ready-to-use samples available for testing"
+          },
           "related_products": [
             302,
             303,
@@ -7336,20 +7351,26 @@
             306
           ],
           "search_metadata": {
-            "popularity_score": 60,
-            "search_boost": 1.1,
-            "trending": false,
-            "featured": false
+            "popularity_score": 95,
+            "search_boost": 1.5,
+            "trending": true,
+            "featured": true,
+            "search_terms": ["fabric", "conditioner", "softener", "clothes", "laundry", "kit", "diy", "manufacturing", "business"]
           }
         },
         {
           "id": 302,
           "name": "LIQUID DETERGENT ULTRA KIT",
           "mrp": 1600,
-          "description": "Ultra-concentrated liquid detergent for brilliant cleaning and shine",
+          "description": "Ultra-concentrated liquid detergent DIY kit for brilliant cleaning and shine with premium formulation",
           "yield": "25 liters",
           "cost_per_liter": 64,
           "knowledge_id": "liquid_detergent_ultra",
+          "kit_contents": ["SLES base", "LABSA", "Salt", "Perfume", "Instructions PDF", "Video tutorial"],
+          "fragrances": ["Ariel", "Surf Excel", "Aqua", "Zesty Fresh"],
+          "manufacturing_time": "45 minutes",
+          "shelf_life": "18 months",
+          "difficulty_level": "Medium",
           "tags": [
             "liquid detergent",
             "washing gel",
@@ -7373,7 +7394,9 @@
             "washing liquid",
             "washing gel",
             "laundry liquid",
-            "cloth washing"
+            "cloth washing",
+            "detergent kit",
+            "ultra kit"
           ],
           "uses": [
             "Machine washing - front and top load",

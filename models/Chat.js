@@ -25,6 +25,8 @@ const chatSchema = new mongoose.Schema({
     ],
     language: { type: String, default: 'en-IN' },
     interactionState: { type: String, default: 'IDLE' }, // IDLE, AWAITING_LANGUAGE
+    lastIntent: { type: String, default: 'general' }, // Track last detected intent
+    totalInteractions: { type: Number, default: 0 }, // Track conversation count
     lastUpdated: {
         type: Date,
         default: Date.now,
