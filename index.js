@@ -15,28 +15,61 @@ app.use(bodyParser.json());
 // Connect to Database
 // connectDB() moved to handlers for serverless support
 
+// Health check endpoint
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Rose Chemicals WhatsApp Bot is running!', 
+        timestamp: new Date(),
+        env_check: {
+            verify_token: !!process.env.WHATSAPP_VERIFY_TOKEN,
+            access_token: !!process.env.WHATSAPP_ACCESS_TOKEN,
+            mongodb_uri: !!process.env.MONGODB_URI
+        }
+    });
+});
+
 // Webhook Verification (GET)
 app.get('/webhook', (req, res) => {
-    const mode = req.query['hub.mode'];
-    const token = req.query['hub.verify_token'];
-    const challenge = req.query['hub.challenge'];
+    try {
+        const mode = req.query['hub.mode'];
+        const token = req.query['hub.verify_token'];
+        const challenge = req.query['hub.challenge'];
 
-    if (mode && token) {
-        if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
-            console.log('WEBHOOK_VERIFIED');
-            res.status(200).send(challenge);
+        console.log('Webhook GET request:', { mode, token, challenge });
+        console.log('VERIFY_TOKEN:', process.env.WHATSAPP_VERIFY_TOKEN);
+
+        if (mode && token) {
+            if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
+                console.log('WEBHOOK_VERIFIED');
+                res.status(200).send(challenge);
+            } else {
+                console.log('Token mismatch');
+                res.sendStatus(403);
+            }
         } else {
-            res.sendStatus(403);
+            console.log('Missing mode or token');
+            res.sendStatus(400); // Invalid request
         }
-    } else {
-        res.sendStatus(400); // Invalid request
+    } catch (error) {
+        console.error('Webhook GET error:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
 // Webhook Event Handling (POST)
 app.post('/webhook', async (req, res) => {
     try {
-        await connectDB();
+        console.log('POST webhook called');
+        
+        // Try to connect to DB, but don't fail if it doesn't work for now
+        try {
+            await connectDB();
+            console.log('Database connected successfully');
+        } catch (dbError) {
+            console.error('Database connection failed:', dbError);
+            // Continue without DB for now to test webhook
+        }
+        
         const body = req.body;
 
         if (body.object) {
