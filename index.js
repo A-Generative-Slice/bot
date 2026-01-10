@@ -35,24 +35,27 @@ app.get('/webhook', (req, res) => {
         const token = req.query['hub.verify_token'];
         const challenge = req.query['hub.challenge'];
 
-        console.log('Webhook GET request:', { mode, token, challenge });
-        console.log('VERIFY_TOKEN:', process.env.WHATSAPP_VERIFY_TOKEN);
+        console.log('Webhook verification attempt:');
+        console.log('Mode:', mode);
+        console.log('Token received:', token);
+        console.log('Expected token:', process.env.WHATSAPP_VERIFY_TOKEN);
+        console.log('Challenge:', challenge);
 
-        if (mode && token) {
+        if (mode && token && challenge) {
             if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
-                console.log('WEBHOOK_VERIFIED');
-                res.status(200).send(challenge);
+                console.log('✅ Webhook verified successfully');
+                return res.status(200).send(challenge);
             } else {
-                console.log('Token mismatch');
-                res.sendStatus(403);
+                console.log('❌ Token mismatch or wrong mode');
+                return res.sendStatus(403);
             }
         } else {
-            console.log('Missing mode or token');
-            res.sendStatus(400); // Invalid request
+            console.log('❌ Missing required parameters');
+            return res.sendStatus(400);
         }
     } catch (error) {
-        console.error('Webhook GET error:', error);
-        res.status(500).json({ error: error.message });
+        console.error('Webhook verification error:', error.message);
+        return res.status(500).json({ error: 'Webhook verification failed' });
     }
 });
 
