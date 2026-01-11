@@ -147,7 +147,7 @@ app.post('/webhook', async (req, res) => {
 "Franchise information please"
 
 📞 *Contact:* +91 8610570490
-🌐 *Website:* www.rosechemicals.co.in` 
+🌐 *Website:* www.rosechemicals.in` 
                             },
                             '2': { 
                                 code: 'ta-IN', 
