@@ -15,16 +15,30 @@ app.use(bodyParser.json());
 // Connect to Database
 // connectDB() moved to handlers for serverless support
 
-// Health check endpoint
+// Health check endpoint with detailed status
 app.get('/', (req, res) => {
     res.json({ 
         message: 'Rose Chemicals WhatsApp Bot is running!', 
         timestamp: new Date(),
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        status: 'healthy',
         env_check: {
             verify_token: !!process.env.WHATSAPP_VERIFY_TOKEN,
             access_token: !!process.env.WHATSAPP_ACCESS_TOKEN,
             mongodb_uri: !!process.env.MONGODB_URI
         }
+    });
+});
+
+// Keep-alive endpoint to prevent cold starts
+app.get('/ping', (req, res) => {
+    res.json({ 
+        status: 'alive', 
+        timestamp: new Date(),
+        uptime: process.uptime(),
+        memory: process.memoryUsage().heapUsed / 1024 / 1024, // MB
+        version: '1.0.0'
     });
 });
 
@@ -61,41 +75,98 @@ app.get('/webhook', (req, res) => {
 
 // Webhook Event Handling (POST)
 app.post('/webhook', async (req, res) => {
+    // Send 200 immediately to WhatsApp to prevent retries
+    res.sendStatus(200);
+    
     try {
-        console.log('POST webhook called');
+        console.log('📨 POST webhook called at:', new Date().toISOString());
         
-        // Try to connect to DB, but don't fail if it doesn't work for now
+        // Connect to DB with timeout
+        const dbTimeout = setTimeout(() => {
+            console.log('⚠️ DB connection timeout, continuing without DB');
+        }, 3000);
+        
         try {
             await connectDB();
-            console.log('Database connected successfully');
+            clearTimeout(dbTimeout);
+            console.log('✅ Database connected successfully');
         } catch (dbError) {
-            console.error('Database connection failed:', dbError);
-            // Continue without DB for now to test webhook
+            clearTimeout(dbTimeout);
+            console.error('❌ Database connection failed:', dbError);
+            // Continue processing without DB
         }
         
         const body = req.body;
 
-        if (body.object) {
-            if (
-                body.entry &&
-                body.entry[0].changes &&
-                body.entry[0].changes[0].value.messages &&
-                body.entry[0].changes[0].value.messages[0]
-            ) {
-                const messageObject = body.entry[0].changes[0].value.messages[0];
-                const from = messageObject.from; // User's phone number
-                const text = messageObject.text ? messageObject.text.body : null;
+        if (body.object && body.entry && body.entry[0].changes) {
+            const messageObject = body.entry[0].changes[0]?.value?.messages?.[0];
+            
+            if (!messageObject) {
+                console.log('⚠️ No message object found');
+                return;
+            }
 
-                if (text) {
-                    console.log(`Received message from ${from}: ${text}`);
+            const from = messageObject.from;
+            const text = messageObject.text?.body;
 
-                    // Find or create chat session
-                    let chat = await Chat.findOne({ phoneNumber: from });
-                    if (!chat) {
-                        chat = new Chat({ phoneNumber: from, messages: [], language: 'en-IN', interactionState: 'IDLE' });
-                    }
+            if (!text) {
+                console.log('⚠️ No text content found');
+                return;
+            }
 
-                    const input = text.trim();
+            console.log(`📨 Processing message from ${from}: "${text.substring(0, 50)}..."`);
+            
+            // Process message with timeout
+            const processTimeout = setTimeout(() => {
+                console.log('⚠️ Message processing timeout for:', from);
+            }, 25000);
+            
+            try {
+                await processUserMessage(from, text);
+                clearTimeout(processTimeout);
+                console.log('✅ Message processed successfully for:', from);
+            } catch (processError) {
+                clearTimeout(processTimeout);
+                console.error('❌ Message processing error:', processError);
+                
+                // Send fallback response
+                try {
+                    await sendMessage(from, "⚠️ I'm experiencing technical difficulties. Please try again in a few minutes or call us at +91 8610570490.");
+                } catch (fallbackError) {
+                    console.error('❌ Fallback message failed:', fallbackError);
+                }
+            }
+        }
+        
+    } catch (error) {
+        console.error('❌ Webhook Error:', error.message);
+        // Don't throw error - just log it
+    }
+});
+
+// Separate message processing function
+async function processUserMessage(from, text) {
+
+    // Find or create chat session
+    let chat;
+    try {
+        chat = await Chat.findOne({ phoneNumber: from });
+        if (!chat) {
+            chat = new Chat({ phoneNumber: from, messages: [], language: 'en-IN', interactionState: 'IDLE' });
+        }
+    } catch (chatError) {
+        console.error('❌ Chat session error:', chatError);
+        // Create minimal chat object for processing
+        chat = {
+            phoneNumber: from,
+            messages: [],
+            language: 'en-IN',
+            interactionState: 'IDLE',
+            save: async () => console.log('Chat save skipped due to DB error')
+        };
+    }
+
+    const input = text.trim();
 
                     // Enhanced menu/reset commands
                     if (input.toLowerCase().match(/^(hello|hi|hey|menu|start|restart|reset)$/)) {
@@ -116,8 +187,7 @@ app.post('/webhook', async (req, res) => {
 
 *Reply with number (1-6)*`;
                         await sendMessage(from, menuMsg);
-                        res.sendStatus(200);
-                        return;
+                        return; // Exit early
                     }
 
                     // Enhanced language selection with better welcome messages
@@ -246,8 +316,7 @@ app.post('/webhook', async (req, res) => {
 5️⃣ Telugu (తెలుగు)
 6️⃣ Kannada (ಕನ್ನಡ)`);
                         }
-                        res.sendStatus(200);
-                        return;
+                        return; // Exit after language selection
                     }
 
                     // Enhanced AI chat with intent detection and context
@@ -292,22 +361,7 @@ app.post('/webhook', async (req, res) => {
                         0, // productsFound - can be enhanced later
                         chat.messages.length
                     );
-                }
-            }
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
-    } catch (error) {
-        console.error('Webhook Error:', error);
-        await logError(error, { 
-            endpoint: 'webhook',
-            body: req.body,
-            timestamp: new Date()
-        });
-        res.sendStatus(500);
-    }
-});
+}
 
 // Admin API to fetch chats
 app.get('/api/chats', async (req, res) => {
