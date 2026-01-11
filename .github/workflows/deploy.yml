@@ -1,0 +1,15 @@
+name: Force Vercel Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Trigger deployment
+        run: |
+          echo "Deployment triggered at $(date)"
+          echo "Latest commit: $(git rev-parse HEAD)"
