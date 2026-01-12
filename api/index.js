@@ -103,9 +103,12 @@ app.post('/webhook', async (req, res) => {
         }
 
         const body = req.body;
+        console.log('🔍 Webhook Body:', JSON.stringify(body, null, 2));
 
         if (body.object && body.entry && body.entry[0].changes) {
+            console.log('✅ Body structure valid');
             const messageObject = body.entry[0].changes[0]?.value?.messages?.[0];
+            console.log('🔍 Message Object:', JSON.stringify(messageObject, null, 2));
 
             if (!messageObject) {
                 console.log('⚠️ No message object found');
@@ -114,6 +117,7 @@ app.post('/webhook', async (req, res) => {
 
             const from = messageObject.from;
             const text = messageObject.text?.body;
+            console.log(`🔍 From: ${from}, Text: ${text}`);
 
             if (!text) {
                 console.log('⚠️ No text content found');
