@@ -1,12 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const connectDB = require('./lib/db');
-const { sendMessage } = require('./lib/whatsapp');
-const { generateResponse } = require('./lib/sarvam');
-const { detectIntent } = require('./lib/intentDetection');
-const { logInteraction, getAnalyticsSummary, logError } = require('./lib/analytics');
-const Chat = require('./models/Chat');
+const connectDB = require('../lib/db');
+const { sendMessage } = require('../lib/whatsapp');
+const { generateResponse } = require('../lib/sarvam');
+const { detectIntent } = require('../lib/intentDetection');
+const { logInteraction, getAnalyticsSummary, logError } = require('../lib/analytics');
+const Chat = require('../models/Chat');
 
 const app = express();
 app.use(bodyParser.json());
