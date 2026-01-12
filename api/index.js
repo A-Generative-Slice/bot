@@ -11,6 +11,12 @@ const Chat = require('../models/Chat');
 const app = express();
 app.use(bodyParser.json());
 
+// DEBUG: Log all requests to check Vercel routing
+app.use((req, res, next) => {
+    console.log(`🔍 INCOMING REQUEST: ${req.method} ${req.url}`);
+    next();
+});
+
 // Connect to Database
 // Connect to Database
 // connectDB() moved to handlers for serverless support
