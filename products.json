@@ -7300,8 +7300,19 @@
           "yield": "20 liters",
           "cost_per_liter": 55,
           "knowledge_id": "fabric_conditioner",
-          "kit_contents": ["Base chemicals", "Fragrance concentrate", "Instructions PDF", "Video guide", "Measuring tools"],
-          "fragrances": ["Moments", "Blossom", "Comfort", "Magic"],
+          "kit_contents": [
+            "Base chemicals",
+            "Fragrance concentrate",
+            "Instructions PDF",
+            "Video guide",
+            "Measuring tools"
+          ],
+          "fragrances": [
+            "Moments",
+            "Blossom",
+            "Comfort",
+            "Magic"
+          ],
           "manufacturing_time": "30 minutes",
           "shelf_life": "12 months",
           "difficulty_level": "Easy",
@@ -7355,7 +7366,17 @@
             "search_boost": 1.5,
             "trending": true,
             "featured": true,
-            "search_terms": ["fabric", "conditioner", "softener", "clothes", "laundry", "kit", "diy", "manufacturing", "business"]
+            "search_terms": [
+              "fabric",
+              "conditioner",
+              "softener",
+              "clothes",
+              "laundry",
+              "kit",
+              "diy",
+              "manufacturing",
+              "business"
+            ]
           }
         },
         {
@@ -7366,8 +7387,20 @@
           "yield": "25 liters",
           "cost_per_liter": 64,
           "knowledge_id": "liquid_detergent_ultra",
-          "kit_contents": ["SLES base", "LABSA", "Salt", "Perfume", "Instructions PDF", "Video tutorial"],
-          "fragrances": ["Ariel", "Surf Excel", "Aqua", "Zesty Fresh"],
+          "kit_contents": [
+            "SLES base",
+            "LABSA",
+            "Salt",
+            "Perfume",
+            "Instructions PDF",
+            "Video tutorial"
+          ],
+          "fragrances": [
+            "Ariel",
+            "Surf Excel",
+            "Aqua",
+            "Zesty Fresh"
+          ],
           "manufacturing_time": "45 minutes",
           "shelf_life": "18 months",
           "difficulty_level": "Medium",
@@ -7779,6 +7812,776 @@
           }
         }
       ]
+    }
+  },
+  "knowledge_base": {
+    "main_menu": {
+      "greeting": {
+        "id": "kb_menu_0",
+        "question": "Main menu",
+        "answer": "WELCOME TO ROSE CHEMICALS. THANK YOU FOR CONTACTING US, PLEASE LET US KNOW HOW WE MAY ASSIST YOU. PLEASE SELECT BELOW\n\n1. PRODUCT KIT\n2. TRAINING VIDEOS\n3. READY TO USE CHEMICALS\n4. CLEANING PRODUCTS\n5. ORDERING\n6. PAYMENTS\n7. DELIVERY\n8. CONTACT INFORMATION & SUPPORT\n9. ONLINE TECHNICAL TRAINING & SAFETY\n10. WORKING HOURS",
+        "keywords": [
+          "menu",
+          "start",
+          "hello",
+          "hi",
+          "help",
+          "options",
+          "begin",
+          "greeting"
+        ],
+        "category": "navigation",
+        "priority": 100
+      }
+    },
+    "product_kits": [
+      {
+        "id": "kb_1_1",
+        "question": "What product kits do you have?",
+        "answer": "ROSE CHEMICALS SUPPLIES A WIDE RANGE OF CLEANING PRODUCT KIT WITH FORMULATION LISTED BELOW:\n\n1. FABRIC CONDITIONER KIT 1:20/Rs 1100\n2. LIQUID DETERGENT - ULTRA KIT 1:25/ Rs 1600\n3. LIQUID DETERGENT - SMART KIT 1:55/ Rs 2000\n4. DISH WASH LIQUID - ULTRA KIT 1:20/ Rs 1200\n5. DISH WASH LIQUID - SMART KIT 1:55/ Rs 2000\n6. FLOOR CLEANER - ULTRA KIT 1:20/ Rs 1100\n7. FLOOR CLEANER - SMART KIT 1:55 / Rs 2000\n8. SOAP OIL KIT 1:50 / Rs 700\n9. GLASS CLEANER KIT 1:20\n10. TOILET BOWL CLEANER 1:50\n11. ROOM FRESHENER KIT 1:20 / Rs 350\n12. PHENYL COMPOUND KIT 1:20/ Rs 200\n13. PHENYL COMPOUND KIT 1:30/ Rs 300\n14. PHENYL COMPOUND KIT 1:50/ Rs 400",
+        "keywords": [
+          "product kit",
+          "kits",
+          "what kits",
+          "which kits",
+          "kit list",
+          "available kits",
+          "diy kits"
+        ],
+        "category": "products",
+        "priority": 90
+      },
+      {
+        "id": "kb_1_1_1",
+        "question": "What is the price of your fabric conditioner kit, and how many litres can be manufactured and what would the cost per liter?",
+        "answer": "PRICE OF OUR FABRIC CONDITIONER KIT IS RS 1100, YOU CAN MAKE 20 LITRES OF FABRIC CONDITIONER AND THE COST OF THE FABRIC CONDITIONER PER LITRE WILL BE RS 55/-",
+        "keywords": [
+          "fabric conditioner",
+          "fabric conditioner price",
+          "fabric conditioner kit",
+          "conditioner cost",
+          "fabric price",
+          "conditioner per liter"
+        ],
+        "category": "products",
+        "priority": 85
+      },
+      {
+        "id": "kb_1_1_2",
+        "question": "How can I manufacture, I am new to this field?",
+        "answer": "DON'T WORRY, WE WILL GIVE YOU STEP BY STEP GUIDANCE IN A PDF FILE AND ALSO A MANUFACTURING VIDEO WITH VOICE SO EVERYONE CAN UNDERSTAND.",
+        "keywords": [
+          "how to manufacture",
+          "new to field",
+          "manufacturing guide",
+          "how to make",
+          "manufacturing process",
+          "guidance",
+          "tutorial"
+        ],
+        "category": "support",
+        "priority": 80
+      },
+      {
+        "id": "kb_1_1_3",
+        "question": "Do you give any personal assistance?",
+        "answer": "OF COURSE, YOU CAN CALL OUR SUPPORT TEAM AND GET PERSONAL ASSISTANCE DURING OFFICE HOURS",
+        "keywords": [
+          "personal assistance",
+          "support",
+          "help",
+          "assistance",
+          "personal help",
+          "call support"
+        ],
+        "category": "support",
+        "priority": 75
+      },
+      {
+        "id": "kb_1_1_4",
+        "question": "Can I get samples?",
+        "answer": "GOOD, WE CAN PROVIDE AS READY TO USE PRODUCT IF YOU ARE CONVINCED WITH THAT THEN YOU CAN TRY OUT KIT.",
+        "keywords": [
+          "samples",
+          "sample product",
+          "try sample",
+          "test product",
+          "ready to use sample"
+        ],
+        "category": "products",
+        "priority": 70
+      },
+      {
+        "id": "kb_1_1_5",
+        "question": "Can I choose any perfume?",
+        "answer": "YES, WE HAVE AROUND 4 FRAGRANCES YOU CAN CHOOSE FROM THAT",
+        "keywords": [
+          "perfume",
+          "fragrance",
+          "scent",
+          "smell",
+          "choose perfume",
+          "perfume options"
+        ],
+        "category": "customization",
+        "priority": 65
+      },
+      {
+        "id": "kb_1_1_6",
+        "question": "What are the fragrances?",
+        "answer": "WE OFFER THE FOLLOWING FRAGRANCES:\nA. MOMENTS\nB. BLOSSOM\nC. COMFORT\nD. MAGIC",
+        "keywords": [
+          "fragrances",
+          "perfume list",
+          "scent options",
+          "fragrance names",
+          "perfume names"
+        ],
+        "category": "customization",
+        "priority": 65
+      },
+      {
+        "id": "kb_1_2_1",
+        "question": "What is the price of your liquid detergent - ultra kit, and how many litres can be manufactured and what would the cost per liter?",
+        "answer": "PRICE OF OUR LIQUID DETERGENT - ULTRA KIT IS RS 1600, YOU CAN MAKE 25 LITRES OF LIQUID DETERGENT AND THE COST OF LIQUID DETERGENT PER LITRE WILL BE RS 64/-",
+        "keywords": [
+          "liquid detergent",
+          "detergent ultra",
+          "detergent price",
+          "detergent kit",
+          "ultra kit",
+          "detergent cost"
+        ],
+        "category": "products",
+        "priority": 85
+      },
+      {
+        "id": "kb_1_2_2",
+        "question": "How can I manufacture liquid detergent, I am new to this field?",
+        "answer": "DON'T WORRY, WE WILL GIVE YOU STEP BY STEP GUIDANCE IN A PDF FILE AND ALSO A MANUFACTURING VIDEO WITH VOICE SO EVERYONE CAN UNDERSTAND.",
+        "keywords": [
+          "manufacture detergent",
+          "detergent guide",
+          "how to make detergent",
+          "detergent process"
+        ],
+        "category": "support",
+        "priority": 80
+      },
+      {
+        "id": "kb_1_2_6",
+        "question": "What are the liquid detergent fragrances?",
+        "answer": "WE OFFER THE FOLLOWING FRAGRANCES FOR LIQUID DETERGENT:\nA. ARIEL\nB. SURF EXCEL\nC. AQUA\nD. ZESTY FRESH",
+        "keywords": [
+          "detergent fragrances",
+          "detergent perfume",
+          "detergent scent",
+          "ariel",
+          "surf excel",
+          "aqua",
+          "zesty fresh"
+        ],
+        "category": "customization",
+        "priority": 65
+      },
+      {
+        "id": "kb_1_2",
+        "question": "Can I get your product catalogue?",
+        "answer": "Yes. You can download our detailed product catalog by visiting www.rosechemicals.co.in or requesting it via email at rosechemicalsindia@gmail.com.",
+        "keywords": [
+          "catalogue",
+          "catalog",
+          "product list",
+          "brochure",
+          "product catalogue",
+          "download catalog"
+        ],
+        "category": "information",
+        "priority": 75
+      },
+      {
+        "id": "kb_1_3",
+        "question": "Do you supply chemicals alone unlike kit?",
+        "answer": "YES. WE SUPPLY CHEMICALS TO MANUFACTURERS, FRANCHISEES, AND RESELLERS ACROSS INDIA.",
+        "keywords": [
+          "chemicals alone",
+          "raw chemicals",
+          "chemicals without kit",
+          "bulk chemicals",
+          "only chemicals"
+        ],
+        "category": "products",
+        "priority": 70
+      },
+      {
+        "id": "kb_1_5",
+        "question": "Can you recommend raw materials for my requirements?",
+        "answer": "Absolutely. Our technical team can recommend the most efficient raw materials based on your product requirements and cost considerations.",
+        "keywords": [
+          "recommend",
+          "raw materials",
+          "suggestions",
+          "technical team",
+          "material recommendation"
+        ],
+        "category": "support",
+        "priority": 70
+      }
+    ],
+    "formulations": [
+      {
+        "id": "kb_2_1",
+        "question": "Do you provide formulations?",
+        "answer": "Yes. We provide tried and tested formulations for products like floor cleaners, toilet cleaners, dishwash gels, handwashes, glass cleaners, and more.",
+        "keywords": [
+          "formulations",
+          "formula",
+          "recipe",
+          "formulation guide",
+          "product formula"
+        ],
+        "category": "formulations",
+        "priority": 80
+      },
+      {
+        "id": "kb_2_2",
+        "question": "Can you customize formulations?",
+        "answer": "Yes. We can adjust fragrance, concentration, color, and performance to suit your specific market or customer demand.",
+        "keywords": [
+          "customize",
+          "customization",
+          "custom formulation",
+          "adjust formula",
+          "personalize"
+        ],
+        "category": "customization",
+        "priority": 75
+      },
+      {
+        "id": "kb_2_3",
+        "question": "Do you provide technical training for formulations?",
+        "answer": "Yes. We provide full technical training for our franchisees, including formulation and production guidance.",
+        "keywords": [
+          "technical training",
+          "formulation training",
+          "production training",
+          "training"
+        ],
+        "category": "training",
+        "priority": 80
+      },
+      {
+        "id": "kb_2_4",
+        "question": "What documentation do you provide for formulations?",
+        "answer": "We provide a detailed process sheet, raw material list, and recommended usage guidelines for every formulation.",
+        "keywords": [
+          "documentation",
+          "process sheet",
+          "guidelines",
+          "formulation docs",
+          "raw material list"
+        ],
+        "category": "formulations",
+        "priority": 70
+      },
+      {
+        "id": "kb_2_5",
+        "question": "Do you help with product labels and branding?",
+        "answer": "Yes. We assist with product labels, branding, and packaging designs for franchise partners.",
+        "keywords": [
+          "labels",
+          "branding",
+          "packaging",
+          "product design",
+          "label design"
+        ],
+        "category": "franchise",
+        "priority": 75
+      }
+    ],
+    "franchise": [
+      {
+        "id": "kb_3_1",
+        "question": "How can I apply for a franchise?",
+        "answer": "You can apply by visiting www.rosechemicals.co.in or contacting us directly at +91 8610570490 for franchise enrollment assistance.",
+        "keywords": [
+          "franchise",
+          "apply franchise",
+          "franchise application",
+          "become franchisee",
+          "franchise enrollment"
+        ],
+        "category": "franchise",
+        "priority": 90
+      },
+      {
+        "id": "kb_3_2",
+        "question": "What do franchisees receive?",
+        "answer": "Franchisees receive raw materials, formulations, branding support, training, marketing materials, and ongoing technical guidance.",
+        "keywords": [
+          "franchise benefits",
+          "franchisee support",
+          "what franchisees get",
+          "franchise package"
+        ],
+        "category": "franchise",
+        "priority": 85
+      },
+      {
+        "id": "kb_3_3",
+        "question": "Do you provide regional exclusivity?",
+        "answer": "Yes. We provide regional exclusivity based on performance and investment scale.",
+        "keywords": [
+          "exclusivity",
+          "regional exclusivity",
+          "exclusive rights",
+          "territory rights"
+        ],
+        "category": "franchise",
+        "priority": 80
+      },
+      {
+        "id": "kb_3_4",
+        "question": "What is the franchise investment required?",
+        "answer": "The investment depends on your region and business scale. Please contact our franchise team for detailed guidance.",
+        "keywords": [
+          "franchise investment",
+          "franchise cost",
+          "investment required",
+          "franchise price"
+        ],
+        "category": "franchise",
+        "priority": 85
+      },
+      {
+        "id": "kb_3_5",
+        "question": "Do you help with production setup?",
+        "answer": "Yes. We help in setting up the entire production system, including sourcing tools and machinery.",
+        "keywords": [
+          "production setup",
+          "setup assistance",
+          "machinery",
+          "production system",
+          "equipment"
+        ],
+        "category": "franchise",
+        "priority": 75
+      },
+      {
+        "id": "kb_3_6",
+        "question": "Do you supply cleaning tools?",
+        "answer": "Yes. We import and supply high-quality cleaning tools directly from China for our franchise partners.",
+        "keywords": [
+          "cleaning tools",
+          "tools supply",
+          "equipment",
+          "imported tools",
+          "china tools"
+        ],
+        "category": "products",
+        "priority": 70
+      },
+      {
+        "id": "kb_3_7",
+        "question": "Do you provide marketing support?",
+        "answer": "Yes. We offer marketing materials, digital promotion support, and local advertising templates.",
+        "keywords": [
+          "marketing",
+          "marketing support",
+          "advertising",
+          "promotion",
+          "marketing materials"
+        ],
+        "category": "franchise",
+        "priority": 75
+      }
+    ],
+    "ordering_delivery_payment": [
+      {
+        "id": "kb_4_1",
+        "question": "How can I place an order?",
+        "answer": "You can place orders through WhatsApp, email (rosechemicalsindia@gmail.com), or via our website www.rosechemicals.co.in.",
+        "keywords": [
+          "order",
+          "place order",
+          "how to order",
+          "ordering",
+          "buy",
+          "purchase"
+        ],
+        "category": "ordering",
+        "priority": 90
+      },
+      {
+        "id": "kb_4_2",
+        "question": "What payment methods do you accept?",
+        "answer": "We accept advance payments via bank transfer, UPI, or other approved methods. Credit terms may apply for regular franchisees.",
+        "keywords": [
+          "payment",
+          "payment methods",
+          "how to pay",
+          "upi",
+          "bank transfer",
+          "credit terms"
+        ],
+        "category": "payment",
+        "priority": 85
+      },
+      {
+        "id": "kb_4_3",
+        "question": "How long does delivery take?",
+        "answer": "Delivery generally takes 5–10 working days depending on product availability and location.",
+        "keywords": [
+          "delivery",
+          "delivery time",
+          "shipping",
+          "how long",
+          "when will i get",
+          "dispatch"
+        ],
+        "category": "delivery",
+        "priority": 85
+      },
+      {
+        "id": "kb_4_4",
+        "question": "Do you deliver across India?",
+        "answer": "Yes. We deliver to all major cities and regions across India.",
+        "keywords": [
+          "delivery locations",
+          "pan india",
+          "delivery areas",
+          "where deliver",
+          "shipping locations"
+        ],
+        "category": "delivery",
+        "priority": 80
+      },
+      {
+        "id": "kb_4_5",
+        "question": "Do you export products?",
+        "answer": "Yes. We can supply export-ready formulations and products on request.",
+        "keywords": [
+          "export",
+          "international",
+          "overseas",
+          "abroad",
+          "export products"
+        ],
+        "category": "ordering",
+        "priority": 70
+      },
+      {
+        "id": "kb_4_6",
+        "question": "Can I track my order?",
+        "answer": "Yes. Once dispatched, tracking details are shared via WhatsApp or email.",
+        "keywords": [
+          "tracking",
+          "track order",
+          "order status",
+          "where is my order",
+          "shipment tracking"
+        ],
+        "category": "delivery",
+        "priority": 80
+      },
+      {
+        "id": "kb_4_7",
+        "question": "Can I get a quotation?",
+        "answer": "Yes. Please share your product list and quantity to receive a formal quotation.",
+        "keywords": [
+          "quotation",
+          "quote",
+          "price quote",
+          "estimate",
+          "pricing"
+        ],
+        "category": "ordering",
+        "priority": 75
+      }
+    ],
+    "training_safety": [
+      {
+        "id": "kb_5_1",
+        "question": "Do you conduct training sessions?",
+        "answer": "Yes. We conduct hands-on and online training sessions covering product formulation, production, and business management.",
+        "keywords": [
+          "training",
+          "training sessions",
+          "workshops",
+          "online training",
+          "hands-on training"
+        ],
+        "category": "training",
+        "priority": 85
+      },
+      {
+        "id": "kb_5_2",
+        "question": "Do you provide Safety Data Sheets?",
+        "answer": "Yes. Safety Data Sheets are available for all products supplied by Rose Chemicals.",
+        "keywords": [
+          "sds",
+          "safety data sheet",
+          "msds",
+          "safety information",
+          "chemical safety"
+        ],
+        "category": "safety",
+        "priority": 80
+      },
+      {
+        "id": "kb_5_3",
+        "question": "What safety precautions should I take?",
+        "answer": "Always wear gloves, a mask, and protective gear. Avoid direct skin contact and ensure adequate ventilation.",
+        "keywords": [
+          "safety",
+          "precautions",
+          "safety measures",
+          "protective gear",
+          "safety guidelines"
+        ],
+        "category": "safety",
+        "priority": 85
+      },
+      {
+        "id": "kb_5_4",
+        "question": "Do you provide technical support?",
+        "answer": "Yes. Our technical support team assists with process improvements and troubleshooting.",
+        "keywords": [
+          "technical support",
+          "troubleshooting",
+          "help",
+          "technical assistance",
+          "support team"
+        ],
+        "category": "support",
+        "priority": 80
+      },
+      {
+        "id": "kb_5_5",
+        "question": "Are your products compliant with safety standards?",
+        "answer": "Yes. Our products comply with national and international chemical safety standards.",
+        "keywords": [
+          "compliance",
+          "standards",
+          "safety standards",
+          "certified",
+          "regulations"
+        ],
+        "category": "safety",
+        "priority": 75
+      },
+      {
+        "id": "kb_5_6",
+        "question": "Do you offer ongoing support?",
+        "answer": "Yes. We offer ongoing technical and formulation support to all clients and franchisees.",
+        "keywords": [
+          "ongoing support",
+          "continuous support",
+          "after sales support",
+          "long term support"
+        ],
+        "category": "support",
+        "priority": 75
+      }
+    ],
+    "contact_information": [
+      {
+        "id": "kb_6_1",
+        "question": "What are your contact details?",
+        "answer": "📞 +91 8610570490\n📧 rosechemicalsindia@gmail.com\n🌐 www.rosechemicals.in",
+        "keywords": [
+          "contact",
+          "phone",
+          "email",
+          "website",
+          "contact details",
+          "how to contact",
+          "reach you"
+        ],
+        "category": "contact",
+        "priority": 90
+      },
+      {
+        "id": "kb_6_2",
+        "question": "What is your address?",
+        "answer": "No.179, First Street, Tagore Nagar, Tiruppalai, Madurai – 625014, Tamil Nadu, India.",
+        "keywords": [
+          "address",
+          "location",
+          "office address",
+          "where located",
+          "madurai",
+          "tamil nadu"
+        ],
+        "category": "contact",
+        "priority": 85
+      },
+      {
+        "id": "kb_6_3",
+        "question": "Is this WhatsApp number your official contact?",
+        "answer": "Yes. This WhatsApp number (+91 8610570490) is our official business contact.",
+        "keywords": [
+          "whatsapp",
+          "official contact",
+          "business whatsapp",
+          "whatsapp number"
+        ],
+        "category": "contact",
+        "priority": 80
+      },
+      {
+        "id": "kb_6_4",
+        "question": "Can I request a callback?",
+        "answer": "Yes. Please provide your name, phone number, and query. Our representative will contact you shortly.",
+        "keywords": [
+          "callback",
+          "call back",
+          "call me",
+          "contact me",
+          "representative"
+        ],
+        "category": "contact",
+        "priority": 75
+      },
+      {
+        "id": "kb_6_5",
+        "question": "Do you have distributors?",
+        "answer": "Yes. We have authorized distributors and franchisees across multiple regions in India.",
+        "keywords": [
+          "distributors",
+          "dealers",
+          "authorized distributors",
+          "franchise network"
+        ],
+        "category": "franchise",
+        "priority": 70
+      }
+    ],
+    "working_hours": [
+      {
+        "id": "kb_7_1",
+        "question": "What are your working hours?",
+        "answer": "We operate from Monday to Saturday, 10:00 AM to 6:00 PM.",
+        "keywords": [
+          "working hours",
+          "office hours",
+          "timings",
+          "open hours",
+          "when open"
+        ],
+        "category": "information",
+        "priority": 90
+      },
+      {
+        "id": "kb_7_2",
+        "question": "Are you open on Sundays?",
+        "answer": "Our office remains closed on Sundays and national holidays.",
+        "keywords": [
+          "sunday",
+          "holiday",
+          "closed",
+          "weekly off",
+          "sundays closed"
+        ],
+        "category": "information",
+        "priority": 80
+      },
+      {
+        "id": "kb_7_3",
+        "question": "Can I send queries after working hours?",
+        "answer": "Yes. You can send your queries anytime, and our team will respond during business hours.",
+        "keywords": [
+          "after hours",
+          "anytime",
+          "24/7",
+          "send queries",
+          "message anytime"
+        ],
+        "category": "contact",
+        "priority": 75
+      }
+    ],
+    "general": [
+      {
+        "id": "kb_8_1",
+        "question": "Can I get samples?",
+        "answer": "Yes. Samples are available for selected formulations upon request.",
+        "keywords": [
+          "samples",
+          "sample request",
+          "try samples",
+          "test samples"
+        ],
+        "category": "products",
+        "priority": 80
+      },
+      {
+        "id": "kb_8_2",
+        "question": "Can I visit your office?",
+        "answer": "Yes. Visits can be scheduled in advance by contacting our office.",
+        "keywords": [
+          "visit",
+          "office visit",
+          "come to office",
+          "meet in person",
+          "schedule visit"
+        ],
+        "category": "contact",
+        "priority": 75
+      },
+      {
+        "id": "kb_8_3",
+        "question": "Do you provide certificates?",
+        "answer": "Yes. We provide required certificates for products as applicable.",
+        "keywords": [
+          "certificates",
+          "certification",
+          "product certificates",
+          "quality certificates"
+        ],
+        "category": "information",
+        "priority": 70
+      },
+      {
+        "id": "kb_8_4",
+        "question": "Do you offer private labeling?",
+        "answer": "Yes. We provide private labeling and OEM support for interested partners.",
+        "keywords": [
+          "private label",
+          "oem",
+          "white label",
+          "own brand",
+          "private labeling"
+        ],
+        "category": "franchise",
+        "priority": 75
+      },
+      {
+        "id": "kb_8_5",
+        "question": "Do you supply cleaning equipment?",
+        "answer": "Yes. We import and supply professional-grade cleaning tools and equipment for industrial use.",
+        "keywords": [
+          "equipment",
+          "cleaning equipment",
+          "tools",
+          "industrial equipment",
+          "machinery"
+        ],
+        "category": "products",
+        "priority": 70
+      }
+    ],
+    "fallback": {
+      "id": "kb_fallback",
+      "question": "default",
+      "answer": "I'm sorry, I didn't understand that. Please choose a valid option from the main menu below:\n\n1️⃣ Products & Raw Materials\n2️⃣ Formulations & Customization\n3️⃣ Franchise Opportunities\n4️⃣ Ordering, Delivery & Payment\n5️⃣ Technical Training & Safety\n6️⃣ Contact Information & Support\n7️⃣ Working Hours",
+      "keywords": [
+        "fallback",
+        "default",
+        "unknown"
+      ],
+      "category": "navigation",
+      "priority": 0
     }
   }
 }
