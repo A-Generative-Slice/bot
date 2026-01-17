@@ -1,15 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const connectDB = require('./lib/db');
-const { sendMessage } = require('./lib/whatsapp');
-const { generateResponse } = require('./lib/sarvam');
-const { detectIntent } = require('./lib/intentDetection');
-const { logInteraction, getAnalyticsSummary, logError } = require('./lib/analytics');
-const Chat = require('./models/Chat');
+const connectDB = require('../lib/db');
+const { sendMessage } = require('../lib/whatsapp');
+const { generateResponse } = require('../lib/sarvam');
+const { detectIntent } = require('../lib/intentDetection');
+const { logInteraction, getAnalyticsSummary, logError } = require('../lib/analytics');
+const Chat = require('../models/Chat');
 
 const app = express();
 app.use(bodyParser.json());
+
+// DEBUG: Log all requests to check Vercel routing
+app.use((req, res, next) => {
+    console.log(`🔍 INCOMING REQUEST: ${req.method} ${req.url}`);
+    next();
+});
 
 // Connect to Database
 // Connect to Database
@@ -17,8 +23,8 @@ app.use(bodyParser.json());
 
 // Health check endpoint with detailed status
 app.get('/', (req, res) => {
-    res.json({ 
-        message: 'Rose Chemicals WhatsApp Bot is running!', 
+    res.json({
+        message: 'Rose Chemicals WhatsApp Bot is running!',
         timestamp: new Date(),
         uptime: process.uptime(),
         memory: process.memoryUsage(),
@@ -33,8 +39,8 @@ app.get('/', (req, res) => {
 
 // Keep-alive endpoint to prevent cold starts
 app.get('/ping', (req, res) => {
-    res.json({ 
-        status: 'alive', 
+    res.json({
+        status: 'alive',
         timestamp: new Date(),
         uptime: process.uptime(),
         memory: process.memoryUsage().heapUsed / 1024 / 1024, // MB
@@ -77,15 +83,15 @@ app.get('/webhook', (req, res) => {
 app.post('/webhook', async (req, res) => {
     // Send 200 immediately to WhatsApp to prevent retries
     res.sendStatus(200);
-    
+
     try {
         console.log('📨 POST webhook called at:', new Date().toISOString());
-        
+
         // Connect to DB with timeout
         const dbTimeout = setTimeout(() => {
             console.log('⚠️ DB connection timeout, continuing without DB');
         }, 3000);
-        
+
         try {
             await connectDB();
             clearTimeout(dbTimeout);
@@ -95,12 +101,15 @@ app.post('/webhook', async (req, res) => {
             console.error('❌ Database connection failed:', dbError);
             // Continue processing without DB
         }
-        
+
         const body = req.body;
+        console.log('🔍 Webhook Body:', JSON.stringify(body, null, 2));
 
         if (body.object && body.entry && body.entry[0].changes) {
+            console.log('✅ Body structure valid');
             const messageObject = body.entry[0].changes[0]?.value?.messages?.[0];
-            
+            console.log('🔍 Message Object:', JSON.stringify(messageObject, null, 2));
+
             if (!messageObject) {
                 console.log('⚠️ No message object found');
                 return;
@@ -108,6 +117,7 @@ app.post('/webhook', async (req, res) => {
 
             const from = messageObject.from;
             const text = messageObject.text?.body;
+            console.log(`🔍 From: ${from}, Text: ${text}`);
 
             if (!text) {
                 console.log('⚠️ No text content found');
@@ -115,12 +125,12 @@ app.post('/webhook', async (req, res) => {
             }
 
             console.log(`📨 Processing message from ${from}: "${text.substring(0, 50)}..."`);
-            
+
             // Process message with timeout
             const processTimeout = setTimeout(() => {
                 console.log('⚠️ Message processing timeout for:', from);
             }, 25000);
-            
+
             try {
                 await processUserMessage(from, text);
                 clearTimeout(processTimeout);
@@ -128,7 +138,7 @@ app.post('/webhook', async (req, res) => {
             } catch (processError) {
                 clearTimeout(processTimeout);
                 console.error('❌ Message processing error:', processError);
-                
+
                 // Send fallback response
                 try {
                     await sendMessage(from, "⚠️ I'm experiencing technical difficulties. Please try again in a few minutes or call us at +91 8610570490.");
@@ -137,7 +147,7 @@ app.post('/webhook', async (req, res) => {
                 }
             }
         }
-        
+
     } catch (error) {
         console.error('❌ Webhook Error:', error.message);
         // Don't throw error - just log it
@@ -168,12 +178,9 @@ async function processUserMessage(from, text) {
 
     const input = text.trim();
 
-                    // Enhanced menu/reset commands
-                    if (input.toLowerCase().match(/^(hello|hi|hey|menu|start|restart|reset)$/)) {
-                        chat.interactionState = 'AWAITING_LANGUAGE';
-                        await chat.save();
-
-                        const menuMsg = `🙏 *Welcome to Rose Chemicals!*
+    // Enhanced menu/reset commands
+    if (input.toLowerCase().match(/^(hello|hi|hey|menu|start|restart|reset)$/)) {
+        const menuMsg = `🙏 *Welcome to Rose Chemicals!*
                         
 🏭 India's leading cleaning product manufacturer & franchise provider.
 
@@ -186,17 +193,27 @@ async function processUserMessage(from, text) {
 6️⃣ Kannada (ಕನ್ನಡ)
 
 *Reply with number (1-6)*`;
-                        await sendMessage(from, menuMsg);
-                        return; // Exit early
-                    }
 
-                    // Enhanced language selection with better welcome messages
-                    if (chat.interactionState === 'AWAITING_LANGUAGE') {
-                        const langMap = {
-                            '1': { 
-                                code: 'en-IN', 
-                                name: 'English', 
-                                msg: `✨ *Welcome to Rose Chemicals!*
+        // Send message FIRST
+        await sendMessage(from, menuMsg);
+
+        // Then update DB
+        try {
+            chat.interactionState = 'AWAITING_LANGUAGE';
+            await chat.save();
+        } catch (err) {
+            console.error('Based DB update failed, but message sent:', err.message);
+        }
+        return; // Exit early
+    }
+
+    // Enhanced language selection with better welcome messages
+    if (chat.interactionState === 'AWAITING_LANGUAGE') {
+        const langMap = {
+            '1': {
+                code: 'en-IN',
+                name: 'English',
+                msg: `✨ *Welcome to Rose Chemicals!*
 
 🏭 *What we offer:*
 • DIY Product Manufacturing Kits (Complete formulations)
@@ -217,12 +234,12 @@ async function processUserMessage(from, text) {
 "Franchise information please"
 
 📞 *Contact:* +91 8610570490
-🌐 *Website:* www.rosechemicals.in` 
-                            },
-                            '2': { 
-                                code: 'ta-IN', 
-                                name: 'Tamil', 
-                                msg: `✨ *ரோஸ் கெமிக்கல்ஸிற்கு வரவேற்கிறோம்!*
+🌐 *Website:* www.rosechemicals.in`
+            },
+            '2': {
+                code: 'ta-IN',
+                name: 'Tamil',
+                msg: `✨ *ரோஸ் கெமிக்கல்ஸிற்கு வரவேற்கிறோம்!*
 
 🏭 *எங்கள் சேவைகள்:*
 • DIY தயாரிப்பு உற்பத்தி கிட்கள்
@@ -236,12 +253,12 @@ async function processUserMessage(from, text) {
 • உரிமைத் தொழில் வாய்ப்புகள்
 
 📞 *தொடர்பு:* +91 8610570490
-🌐 *வலைதளம்:* www.rosechemicals.in` 
-                            },
-                            '3': { 
-                                code: 'hi-IN', 
-                                name: 'Hindi', 
-                                msg: `✨ *रोज़ केमिकल्स में आपका स्वागत है!*
+🌐 *வலைதளம்:* www.rosechemicals.in`
+            },
+            '3': {
+                code: 'hi-IN',
+                name: 'Hindi',
+                msg: `✨ *रोज़ केमिकल्स में आपका स्वागत है!*
 
 🏭 *हमारी सेवाएं:*
 • DIY उत्पाद निर्माण किट
@@ -255,12 +272,12 @@ async function processUserMessage(from, text) {
 • फ्रैंचाइज़ी जानकारी
 
 📞 *संपर्क:* +91 8610570490
-🌐 *वेबसाइट:* www.rosechemicals.in` 
-                            },
-                            '4': { 
-                                code: 'ml-IN', 
-                                name: 'Malayalam', 
-                                msg: `✨ *റോസ് കെമിക്കൽസിലേക്ക് സ്വാഗതം!*
+🌐 *वेबसाइट:* www.rosechemicals.in`
+            },
+            '4': {
+                code: 'ml-IN',
+                name: 'Malayalam',
+                msg: `✨ *റോസ് കെമിക്കൽസിലേക്ക് സ്വാഗതം!*
 
 🏭 *ഞങ്ങളുടെ സേവനങ്ങൾ:*
 • DIY ഉൽപ്പാദന കിറ്റുകൾ
@@ -269,12 +286,12 @@ async function processUserMessage(from, text) {
 • ഫ്രാഞ്ചൈസി അവസരങ്ങൾ
 
 📞 *ബന്ധപ്പെടുക:* +91 8610570490
-🌐 *വെബ്സൈറ്റ്:* www.rosechemicals.in` 
-                            },
-                            '5': { 
-                                code: 'te-IN', 
-                                name: 'Telugu', 
-                                msg: `✨ *రోజ్ కెమికల్స్ కి స్వాగతం!*
+🌐 *വെബ്സൈറ്റ്:* www.rosechemicals.in`
+            },
+            '5': {
+                code: 'te-IN',
+                name: 'Telugu',
+                msg: `✨ *రోజ్ కెమికల్స్ కి స్వాగతం!*
 
 🏭 *మా సేవలు:*
 • DIY ఉత్పత్తి తయారీ కిట్లు
@@ -283,12 +300,12 @@ async function processUserMessage(from, text) {
 • ఫ్రాంచైజీ అవకాశాలు
 
 📞 *సంప్రదించండి:* +91 8610570490
-🌐 *వెబ్‌సైట్:* www.rosechemicals.in` 
-                            },
-                            '6': { 
-                                code: 'kn-IN', 
-                                name: 'Kannada', 
-                                msg: `✨ *ರೋಸ್ ಕೆಮಿಕಲ್ಸ್‌ಗೆ ಸ್ವಾಗತ!*
+🌐 *వెబ్‌సైట్:* www.rosechemicals.in`
+            },
+            '6': {
+                code: 'kn-IN',
+                name: 'Kannada',
+                msg: `✨ *ರೋಸ್ ಕೆಮಿಕಲ್ಸ್‌ಗೆ ಸ್ವಾಗತ!*
 
 🏭 *ನಮ್ಮ ಸೇವೆಗಳು:*
 • DIY ಉತ್ಪಾದನಾ ಕಿಟ್‌ಗಳು
@@ -297,17 +314,24 @@ async function processUserMessage(from, text) {
 • ಫ್ರಾಂಚೈಸಿ ಅವಕಾಶಗಳು
 
 📞 *ಸಂಪರ್ಕ:* +91 8610570490
-🌐 *ವೆಬ್‌ಸೈಟ್:* www.rosechemicals.in` 
-                            }
-                        };
+🌐 *ವೆಬ್‌ಸೈಟ್:* www.rosechemicals.in`
+            }
+        };
 
-                        if (langMap[input]) {
-                            chat.language = langMap[input].code;
-                            chat.interactionState = 'IDLE';
-                            await chat.save();
-                            await sendMessage(from, langMap[input].msg);
-                        } else {
-                            await sendMessage(from, `Please reply with a number from 1 to 6.
+        if (langMap[input]) {
+            // Send message FIRST
+            await sendMessage(from, langMap[input].msg);
+
+            // Then update DB
+            try {
+                chat.language = langMap[input].code;
+                chat.interactionState = 'IDLE';
+                await chat.save();
+            } catch (err) {
+                console.error('Language DB update failed, but message sent:', err.message);
+            }
+        } else {
+            await sendMessage(from, `Please reply with a number from 1 to 6.
 
 1️⃣ English
 2️⃣ Tamil (தமிழ்)
@@ -315,52 +339,52 @@ async function processUserMessage(from, text) {
 4️⃣ Malayalam (മലയാളം)
 5️⃣ Telugu (తెలుగు)
 6️⃣ Kannada (ಕನ್ನಡ)`);
-                        }
-                        return; // Exit after language selection
-                    }
+        }
+        return; // Exit after language selection
+    }
 
-                    // Enhanced AI chat with intent detection and context
-                    const startTime = Date.now();
-                    
-                    // Detect user intent for better processing
-                    const userIntent = detectIntent(text);
-                    console.log(`Intent detected: ${userIntent} for message from ${from}: "${text}"`);
+    // Enhanced AI chat with intent detection and context
+    const startTime = Date.now();
 
-                    // Save user message
-                    chat.messages.push({ role: 'user', content: text });
+    // Detect user intent for better processing
+    const userIntent = detectIntent(text);
+    console.log(`Intent detected: ${userIntent} for message from ${from}: "${text}"`);
 
-                    // Generate enhanced AI response with full context
-                    const aiResponse = await generateResponse(
-                        text, 
-                        chat.language, 
-                        chat.messages.slice(-5), // Last 5 messages for context
-                        from
-                    );
+    // Save user message
+    chat.messages.push({ role: 'user', content: text });
 
-                    // Send response back to user
-                    await sendMessage(from, aiResponse);
+    // Generate enhanced AI response with full context
+    const aiResponse = await generateResponse(
+        text,
+        chat.language,
+        chat.messages.slice(-5), // Last 5 messages for context
+        from
+    );
 
-                    // Save AI response and update chat
-                    chat.messages.push({ role: 'assistant', content: aiResponse });
-                    chat.lastUpdated = new Date();
-                    chat.lastIntent = userIntent; // Track user intent
-                    chat.totalInteractions += 1; // Increment interaction count
-                    await chat.save();
+    // Send response back to user
+    await sendMessage(from, aiResponse);
 
-                    const responseTime = Date.now() - startTime;
-                    console.log(`Response sent to ${from} in ${responseTime}ms for intent: ${userIntent}`);
-                    
-                    // Log analytics for this interaction
-                    await logInteraction(
-                        from,
-                        text,
-                        aiResponse,
-                        chat.language,
-                        userIntent,
-                        responseTime,
-                        0, // productsFound - can be enhanced later
-                        chat.messages.length
-                    );
+    // Save AI response and update chat
+    chat.messages.push({ role: 'assistant', content: aiResponse });
+    chat.lastUpdated = new Date();
+    chat.lastIntent = userIntent; // Track user intent
+    chat.totalInteractions += 1; // Increment interaction count
+    await chat.save();
+
+    const responseTime = Date.now() - startTime;
+    console.log(`Response sent to ${from} in ${responseTime}ms for intent: ${userIntent}`);
+
+    // Log analytics for this interaction
+    await logInteraction(
+        from,
+        text,
+        aiResponse,
+        chat.language,
+        userIntent,
+        responseTime,
+        0, // productsFound - can be enhanced later
+        chat.messages.length
+    );
 }
 
 // Admin API to fetch chats
@@ -381,14 +405,14 @@ app.get('/api/analytics', async (req, res) => {
         await connectDB();
         const days = parseInt(req.query.days) || 7;
         const summary = await getAnalyticsSummary(days);
-        
+
         if (!summary) {
             return res.json({
                 message: 'No analytics data available for the specified period',
                 days
             });
         }
-        
+
         res.json({
             period: `${days} days`,
             summary,
